@@ -1,0 +1,275 @@
+table {
+	border-collapse: collapse;
+	margin: 0 auto;
+	padding: 0;
+	width: 100%;
+	border: 0;
+	font-family: 'IBM Plex Mono';
+}
+.account-page table {
+	position: relative;
+	top: 4.5rem;
+}
+/*
+table tr {
+	border: 1px solid #ddd;
+}
+*/
+/*
+table th > *,
+table td > * {
+	vertical-align: middle;
+}
+*/
+
+table th {
+	font-size: .875rem;
+	height: 4.5rem;
+	font-weight: 400;
+	text-transform: uppercase;
+	border-bottom: 2px solid #000;
+	cursor: pointer;
+}
+
+table th:first-child {
+	padding-left: 3.5rem;
+}
+
+table th:last-child {
+	padding-right: 3.5rem;
+}
+
+table th:last-child p {
+	float: right;
+}
+
+table th:hover {
+	text-decoration: underline;
+}
+
+table td {
+	display: flex;
+	align-items: center;
+	font-size: .875rem;
+	height: 4.5rem;
+	transition: .2s;
+}
+
+table td:first-child {
+	justify-content: space-between;
+	padding-left: 3.5rem;
+}
+
+table td:first-child img {
+	margin-right: .5rem;
+	width: 2.5rem;
+	height: 2.5rem;
+}
+
+table td:first-child > div {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+table td:last-child {
+	padding-right: 3.5rem;
+}
+
+table td span.currency {
+	color: #787878;
+	margin-left: .5em;
+}
+
+.account-page table td > div p {
+	margin: 0;
+}
+
+.account-page table td a.btn {
+	border-width: 2px;
+}
+
+@media screen and (max-width: 767px) {
+	table {
+    	border: 0;
+	}
+
+	table thead {
+	    display: none;
+	}
+
+	table tr {
+	    border: 1px solid #000;
+	    margin: 1rem 1.5rem;
+	    display: block;
+	}
+
+	table tr:hover td {
+		background: unset;
+		color: unset;
+	}
+
+	table tr:hover td:first-child {
+		background: #ddd;
+	}
+
+	table td {
+	    display: flex;
+		justify-content: space-between;
+		align-items: center;
+	    height: 2.25rem;
+	    text-align: right;
+	    padding: 0 1rem;
+	}
+
+	table td:first-child {
+		font-size: .975rem;
+		font-weight: 600;
+		height: 4.5rem;
+		background: #eee;
+		padding-left: 1rem;
+		text-align: left;
+	}
+	table td:first-child::before {
+		display: none;
+	}
+	table td:first-child div {
+		width: 100%;
+	}
+	table td:first-child img {
+		order: 2;
+		margin-left: .5rem;
+		margin-right: 0;
+	}
+
+	table td:last-child {
+		padding-right: 1rem;
+		border-bottom: 0;
+	}
+
+	table td::before {
+	    /*
+	    * aria-label has no advantage, it won't be read inside a table
+	    content: attr(aria-label);
+	    */
+	    content: attr(data-label);
+	    text-align: left;
+	    font-weight: bold;
+	    text-transform: uppercase;
+	    width: 5rem;
+	}
+
+	table td > div {
+		width: 70%;
+	}
+
+	.account-page table td:last-child {
+		height: 4rem;
+	}
+
+	.account-page table td a.btn {
+		min-width: 11rem;
+		height: 2rem;
+	}
+
+}
+
+@media screen and (min-width: 768px) {
+
+	table thead,
+	table tbody {
+		display: block;
+		width: 100%;
+	}
+
+	table tr {
+		display: grid;
+		grid-template-columns: 28% 16% 4% 5% 15% 8% 7% 17%;
+	}
+
+	.account-page table tr {
+		grid-template-columns: 2fr 14% 8% 14% 12% 1fr;
+	}
+
+	table tbody tr:hover {
+		background: #000;
+		color: #fff;
+	}
+
+	table thead th {
+		transition: .2s;
+	}
+
+	table.fixedhead thead {
+		position: fixed;
+		z-index: 0;
+		width: 100%;
+		background: #fff;
+	}
+
+	table.fixedhead thead th {
+		height: 2rem;
+	}
+
+	table.fixedhead tbody:before {
+	    content: "-";
+	    display: block;
+	    line-height: 3rem;
+	    color: transparent;
+	}
+
+	table th p {
+		display: flex;
+		align-items: center;
+		margin: 0;
+		height: 100%;
+	}
+
+	table th p.selected {
+		font-weight: 700;
+		text-decoration: underline;
+	}
+
+	table td {
+		padding-right: .5rem;
+	}
+
+	table td:last-child {
+		justify-content: flex-end;
+	}
+
+	table td:last-child div {
+		width: 100%;
+		text-align: right;
+		inline-size: 100%;
+    	overflow-wrap: break-word;
+	}
+	table td:last-child div span {
+		display: inline-block;
+	}
+
+	.account-page table td a.btn {
+		min-width: 7rem;
+	}
+	.account-page table td a.btn:hover {
+		background: #eee;
+		color: #000;
+	}
+	.account-page table th:nth-last-child(2) p {
+		justify-content: flex-end;
+	}
+	.account-page table td:nth-last-child(2) div {
+		text-align: right;
+		inline-size: 100%;
+    	overflow-wrap: break-word;
+	}
+	.account-page table td:nth-last-child(2) {
+		padding: 0;
+	}
+	.account-page table td:nth-last-child(2) div span {
+		white-space: nowrap;
+	}
+	.account-page table td:last-child {
+		padding-left: .5rem;
+	}
+}

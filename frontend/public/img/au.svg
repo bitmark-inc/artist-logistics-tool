@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 22.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 53.2 46.1" style="enable-background:new 0 0 53.2 46.1;" xml:space="preserve">
+<style type="text/css">
+	.st0{clip-path:url(#SVGID_2_);}
+	.st1{fill:#FFFFFF;}
+	.st2{fill:none;stroke:#000000;stroke-width:1.5;stroke-linejoin:bevel;}
+</style>
+<g>
+	<defs>
+		<rect id="SVGID_1_" x="-5.5" y="-9.2" width="64" height="64"/>
+	</defs>
+	<clipPath id="SVGID_2_">
+		<use xlink:href="#SVGID_1_"  style="overflow:visible;"/>
+	</clipPath>
+	<g class="st0">
+		<path class="st1" d="M39.4,30.9h-8l-8.9-15.4L5.3,45.3l-4.6-7.2L22.2,1L39.4,30.9z"/>
+		<path class="st1" d="M18.1,37.4l4.1-7.2h4.4h5.1h7.9l-17-29.5H31l21.2,36.6L18.1,37.4z"/>
+		<path class="st2" d="M31.6,30.6l-9-15.4L5.2,45.3h43.1l3.9-7.3"/>
+		<path class="st2" d="M26.6,22.6L17.7,38l34.7,0L30.9,0.8l-8.4,0"/>
+		<path class="st2" d="M21.8,30.8l17.9,0L22.3,0.7L0.7,38l4.6,7.2"/>
+		<path d="M5.2,45.3l17.1-29.7l4.1,7l-8.9,15.5h34l-3.8,7.1H5.2z"/>
+	</g>
+</g>
+</svg>

@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&display=swap'); /*1 2 3 4 5 6 7*/
+
+@font-face {
+  font-family: 'Domaine Sans';
+  src: url('../font/domaine-sans-text/DomaineSansText-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Domaine Sans';
+  src: url('../font/domaine-sans-text/DomaineSansText-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Atlas Grotesk';
+  src: url('../font/atlas-grotesk/AtlasGrotesk-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Atlas Grotesk';
+  src: url('../font/atlas-grotesk/AtlasGrotesk-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Atlas Grotesk';
+  src: url('../font/atlas-grotesk/AtlasGrotesk-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
