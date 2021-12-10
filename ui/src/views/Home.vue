@@ -27,10 +27,11 @@
       <div class="two-col">
         <div class="left">
           <h3>I. Select Artworks</h3>
-          <strong style="display: block; margin-bottom: 0.5rem"
-            >* Please select {{ maxSelectableNumber }} items from your collected
-            digital editions for signed prints.</strong
-          >
+          <strong style="display: block; margin-bottom: 0.5rem">
+            * Please select {{ maxSelectableNumber }} items from your collected
+            digital editions for signed prints. Remaining:
+            {{ maxSelectableNumber - totalSelected }}
+          </strong>
           <div class="grids">
             <div
               class="card"
@@ -314,8 +315,6 @@ const web3Modal = new Web3Modal({
         if (this.totalSelected < this.maxSelectableNumber) {
           item.selected = true;
           this.totalSelected += 1;
-        } else {
-          alert("too many seleced items");
         }
       }
     },
