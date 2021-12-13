@@ -9,15 +9,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    animation: fadeInLoad 1s;
-  }
-  @keyframes fadeInLoad {
-      from {
-          opacity:0;
-      }
-      to {
-          opacity:1;
-      }
   }
   .login {
     width: 100%;

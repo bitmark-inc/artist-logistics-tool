@@ -9,15 +9,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    animation: fadeInLoad 1s;
-  }
-  @keyframes fadeInLoad {
-      from {
-          opacity:0;
-      }
-      to {
-          opacity:1;
-      }
   }
   .login {
     width: 100%;
@@ -56,7 +47,7 @@
       <img src="img/au.svg" alt="">
       <h1>Autonomy</h1>
       <hr>
-      <p class="des">Get started by clicking the Connect button below - you will be asked for personal information that will then be shared directly with Refik Anadol so they can fulfill your request. You can reach them on Discord through your designated exhibition channel if you have any followup questions.</p>
+      <p class="des">Get started by clicking the Connect button below - you will be asked for personal information that will then be shared directly with Refik Anadol so they can fulfill your request. You can reach them on <a href="https://discord.gg/vXvpeETTD6" blank="target">Discord</a> through your designated exhibition channel if you have any followup questions.</p>
       <div class="btn-set">
         <button class="primary">Connect</button>
       </div>

@@ -34,8 +34,12 @@ strong {
 }
 
 a {
-	color: #000;
+	color: #555BFF;
 	text-decoration: none;
+}
+
+a:hover {
+	color: #4448BB;
 }
 
 button,
@@ -145,6 +149,15 @@ ol li {
 	margin-bottom: .5rem;
 }
 
+@keyframes fadeInLoad {
+	from {
+		opacity:0;
+	}
+	to {
+		opacity:1;
+	}
+}
+
 div#app.wrapper {
 	width: 100%;
 	height: 100%;
@@ -161,11 +174,17 @@ header {
 	box-sizing: border-box;
 	border-bottom: 2px solid #000;
 	z-index: 60;
+	animation: fadeInLoad 1s;
 }
 
 .brand {
 	display: flex;
 	align-items: center;
+	color: #000;
+}
+
+.brand:hover {
+	color: #000;
 }
 
 .brand img {
@@ -202,6 +221,7 @@ header {
 main {
 	padding: 0 1.5rem;
 	box-sizing: border-box;
+	animation: fadeInLoad 1s;
 }
 
 .two-col {
