@@ -220,15 +220,6 @@ import axios from "axios";
 
 import exhibitionABI from "./FeralFileExhibitionV2.json";
 
-const providerOptions = {
-  walletconnect: {
-    package: WalletConnectProvider, // required
-    options: {
-      infuraId: "INFURA_ID", // required
-    },
-  },
-};
-
 // [Feral File — Social Codes (FF001)](https://etherscan.io/address/0x28b51ba8b990c48cb22cb6ef0ad5415fdba5210c)
 // [Feral File — The Bardo: Unpacking the Real (FF002)](https://etherscan.io/address/0xaa02cc02f4531ee75d1b78cb5a155d4f3b54f830)
 // [Feral File — Fragments of a Hologram Rose (FF003)](https://etherscan.io/address/0x979316f5b3f3d8db956af519553c853525a5b1af)
@@ -240,11 +231,38 @@ const providerOptions = {
 // [Feral File — Unsupervised (FF009)](https://etherscan.io/address/0x7a15b36cb834aea88553de69077d3777460d73ac)
 // [Feral File — –GRAPH (FF010)](https://etherscan.io/address/0xdb5f1adcffa1869b9711cbfbe3bf46cc5d5319e5)
 
-const web3Modal = new Web3Modal({
-  network: "mainnet", // optional
-  cacheProvider: true, // optional
-  providerOptions, // required
-});
+type StringMap = {
+  [key: string]: string;
+};
+
+const imageSrc: StringMap = {
+  "01b502397dcfdd7337b62a45694ceb219eb8513577646cb46f357b379719c06d49fe2eef9bccb98c98d7f09915d5751c30afb720aaff4fd30401e2253c2588c0":
+    "https://cdn.feralfileassets.com/thumbnails/e601569d-5611-4a82-93ba-a7f55b260001/1637053732",
+  "539d0f5499fb82cc3d519d68dcffc540e8278ea55e22de4229cd1f32f5b3e805a8dc1594155163b7bf47258d461b66edeff32f5ae395d984e34ec3bfbad37249":
+    "https://cdn.feralfileassets.com/thumbnails/96f1663b-5216-4758-aa7f-3a70e6d9d45b/1637052722",
+  a1a1c08ec9c7d62c2496b75c6ebd37ed1e2f59c83694ada29b1b2d9e3507a81f9d0be6bb34079fe6f38d37a47fefa08ed1649355b8bd8d51c400dc0f92ae55dd:
+    "https://cdn.feralfileassets.com/thumbnails/61c2c2b6-4f2c-4e1b-9e45-23faf3e76594/1637046234",
+  b294e029328010fd8e71954c3527d4acf978c7fc5091707a780cfc98baed45e4180d8d3ce6fc65a6fd944db9805df8c0a93e8bb874cc80e5f789fc177019c528:
+    "https://cdn.feralfileassets.com/thumbnails/29b720ff-fcbf-4467-a53d-e79a90ad0d60/1637054909",
+  "10781635a7ca427c9ca0831018e63b668d56bf9493f6d59fbe8e6cab9585660aa00ab14578ae8f7c391b6f6d437d1fc93418d4c70a90f4c32314c4b2e26bf4ce":
+    "https://cdn.feralfileassets.com/thumbnails/d35cdb38-917f-42f3-9914-e276dc5f0ded/1637038450",
+  b1f969b7704cb938d1ab5d9ef2ee5fdfb8d21b2aa5c5e016b18ee5f9286ff64787523f35a0d414b74267789230969c20ea98cb79352f7893ecb2347d77c387a7:
+    "https://cdn.feralfileassets.com/thumbnails/821dd86a-8764-441f-af58-95c857a7c4d3/1637046126",
+  b3b9a02ce920bbc94e72b9f64884b68a95163bb88813e9e8f25754bf0ea84c0efb32c546b54f0244278aaa049cf263ec45252ce828108cf33782f7e3dc2332db:
+    "https://cdn.feralfileassets.com/thumbnails/c3b2c10b-91c6-4e2f-83bc-fcb5068e98be/1637046195",
+  "19df39ff870c1229962a53b754b797a48cf6dd0b2c5b93267d10be0d3bf4da408bb7aa7a5c421a22faa38b378f1c9fd41b09caf9d1021fb72079a0fd8f5dac6b":
+    "https://cdn.feralfileassets.com/thumbnails/e362fa91-c218-45df-8167-d7e7c3440052/1637046307",
+  "76460ab711429437bfc0c3b46141e068e7451f5da5e0bbdbbb2d17b939f78a0b73e5d8bc6e6faa402407567d632a9f5efaa93e1111bf92ea809aa9e60b7c9fc3":
+    "https://cdn.feralfileassets.com/thumbnails/29cd44b3-2ed9-4d8b-beb5-073d248a1a00/1637046395",
+  c41d4e6d2e2d5f17e325b62ab2af801c850d400100480f13c7d5e9dc74b7fe0cebcf701c9f7e77e5c0b840892aa0f47fd1162bea1106a16bddf4709d53e54223:
+    "https://cdn.feralfileassets.com/thumbnails/c4c9bfde-13bc-4cf5-bc4d-817280673ec3/1637046279",
+  "574eafa537953a1af58467788a9a84640c6a80c072d625e2315b111e445ecaf280a1fdb4ceb1043e0d3d03bec85a5ebfb1cae1e9f9d75a9eef11c846e063139a":
+    "https://cdn.feralfileassets.com/thumbnails/31bc21a0-c834-49a3-866f-d4839cbe14df/1637046336",
+  "56c69488317e1c464a20b3c6d025d4aa0f4c15d373b81f453b28e5662dc0cd840e4883541f95a2528d2212faa5a00f49d691109afe96a0da04c303185ceec972":
+    "https://cdn.feralfileassets.com/thumbnails/6a0781b7-93ff-4cef-9a92-6e197990be57/1637046364",
+  "105520675453f8b45271044006420520186e5a948e05329d7d08e15fa21f1b916a4754b4ea7db06cff0e3cc71b777043f2173554c037090e93f9489ca53135ee":
+    "https://cdn.feralfileassets.com/thumbnails/d6e1e0f1-7a9d-46f1-a691-bf0604e755b5/1637053332",
+};
 
 @Options({
   components: {},
@@ -259,24 +277,46 @@ const web3Modal = new Web3Modal({
       this.testAccountNumber = query.testAccountNumber;
     }
 
-    if (query.code) {
+    this.loginByEmail = query.code && query.requester;
+    if (this.loginByEmail) {
       this.web3Logout();
+      this.accountNumber = query.requester;
       this.code = query.code;
     } else {
-      if (web3Modal.cachedProvider) {
-        this.web3Login();
+      if (this.$web3Modal.cachedProvider) {
+        await this.web3Login();
+      } else {
+        this.$router.push({ name: "Welcome" });
+        return;
       }
     }
+    await this.checkSubmission();
+    await this.loadToken();
   },
 
   methods: {
+    async checkSubmission() {
+      try {
+        let resp = await axios.head(
+          this.apiRoot + "/api/claim?requester=" + this.queryAccount,
+          {
+            headers: {
+              Requester: this.queryAccount,
+            },
+          }
+        );
+        this.$router.push({ name: "ThankYou" });
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
     async web3Login() {
-      const provider = await web3Modal.connect();
-      console.log(provider);
+      const provider = await this.$web3Modal.connect();
 
       this.web3 = new Web3(provider);
       window.ethereum.on("accountsChanged", (accounts: Array<string>) => {
-        console.log("accountsChanged");
+        console.log("ethereum accounts changed");
         this.accountNumber = accounts[0];
       });
 
@@ -287,17 +327,41 @@ const web3Modal = new Web3Modal({
 
       let accounts = await this.web3.eth.getAccounts();
       this.accountNumber = accounts[0];
+    },
 
+    async loadToken() {
       let resp = await axios.get(
         this.apiRoot + "/api/owned/" + this.queryAccount
       );
 
-      resp.data.artworks.forEach((ownedToken: any) => {
-        this.pushToken(ownedToken.token_id);
+      if (resp.data.artworks.length == 0) {
+        this.$router.push({ name: "Nothing" });
+      }
+
+      resp.data.artworks.forEach(async (ownedToken: any) => {
+        if (this.loginByEmail) {
+          await this.pushTokenByBitmark(ownedToken.token_id);
+        } else {
+          await this.pushTokenByEthereum(ownedToken.token_id);
+        }
       });
     },
 
-    async pushToken(tokenID: string) {
+    async pushTokenByBitmark(tokenID: string) {
+      let resp: any = await axios.get(
+        "https://api.bitmark.com/v1/bitmarks/" + tokenID + "?asset=true"
+      );
+
+      let data = resp.data;
+      this.tokens.push({
+        id: tokenID,
+        name: data.asset.metadata.title,
+        imageURL: imageSrc[data.asset.id],
+        selected: false,
+      });
+    },
+
+    async pushTokenByEthereum(tokenID: string) {
       let tokenURI = await this.contract.methods.tokenURI(tokenID).call();
       let metadata: any = await axios.get(tokenURI);
 
@@ -310,16 +374,14 @@ const web3Modal = new Web3Modal({
     },
 
     web3Logout() {
-      if (web3Modal.cachedProvider == "wallet connect") {
+      if (this.$web3Modal.cachedProvider == "wallet connect") {
         this.web3.eth.currentProvider.disconnect();
       }
-      web3Modal.clearCachedProvider();
-      this.provider = null;
-      this.web3 = null;
-      this.accountNumber = "";
-      this.balance = 0;
-      this.tokens = [];
-      this.reset();
+      this.$web3Modal.clearCachedProvider();
+
+      if (!this.loginByEmail) {
+        this.$router.push({ name: "Welcome" });
+      }
     },
 
     selectToken(item: any) {
@@ -347,26 +409,40 @@ const web3Modal = new Web3Modal({
         tokens: selectedTokens,
       };
 
-      let now = (+new Date()).toString();
-      var hash = this.web3.utils.keccak256(now);
+      let authToken: string;
 
-      let signature: string = await this.web3.eth.personal.sign(
-        hash,
-        this.accountNumber
-      );
+      if (this.web3) {
+        let now = (+new Date()).toString();
+        var hash = this.web3.utils.keccak256(now);
+        let signature: string = await this.web3.eth.personal.sign(
+          hash,
+          this.accountNumber
+        );
+        authToken = signature.slice(2) + Buffer.from(now).toString("hex");
+      } else {
+        authToken = this.code;
+      }
 
       try {
         let resp = await axios.post(this.apiRoot + "/api/claim", data, {
           headers: {
-            Authorization:
-              "Bearer " + signature.slice(2) + Buffer.from(now).toString("hex"),
+            Authorization: "Bearer " + authToken,
             Requester: this.accountNumber,
           },
         });
-        console.log(resp);
+        this.$router.push({ name: "ThankYou" });
       } catch (error) {
-        alert(error.response.data.error);
+        this.showErrorModal("Server error: " + error.response.data.error);
       }
+    },
+
+    showErrorModal(message: string) {
+      this.errorModalMessage = message;
+      this.openErrorModal = true;
+    },
+
+    closeErrorModel() {
+      this.openErrorModal = false;
     },
 
     reset() {
@@ -399,6 +475,9 @@ const web3Modal = new Web3Modal({
       totalSelected: 0,
 
       apiRoot: "",
+
+      openErrorModal: false,
+      errorModalMessage: "",
     };
   },
 })
