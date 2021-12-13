@@ -1,0 +1,9 @@
+ui_path: /usr/share/ui
+
+log:
+  level: debug
+
+network: testnet
+
+store:
+  dsn: host=localhost user=test password=test dbname=db port=5432
