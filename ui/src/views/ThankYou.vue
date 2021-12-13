@@ -51,3 +51,19 @@
     </div>
   </main>
 </template>
+
+
+<script lang="ts">
+import { Options, Vue } from "vue-class-component";
+
+@Options({
+  async created() {
+    if (this.$web3Modal.cachedProvider == "wallet connect") {
+      this.web3.eth.currentProvider.disconnect();
+    }
+    this.$web3Modal.clearCachedProvider();
+  },
+})
+export default class ThankYou extends Vue {}
+</script>
+
