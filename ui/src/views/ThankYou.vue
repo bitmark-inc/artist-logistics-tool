@@ -56,7 +56,7 @@
       <img src="img/au.svg" alt="">
       <h1>Autonomy</h1>
       <hr>
-      <p class="des">Thank you for finishing the form. We'll ship the artworks soon!</p>
+      <p class="des">Thank you for submitting your information. We will be in touch soon.</p>
     </div>
   </main>
 </template>

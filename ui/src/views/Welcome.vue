@@ -56,7 +56,7 @@
       <img src="img/au.svg" alt="">
       <h1>Autonomy</h1>
       <hr>
-      <p class="des">Welcome to Autonomy. Please connect with your wallet to claim your collection of Refik Anadol's artworks in print.</p>
+      <p class="des">Get started by clicking the Connect button below - you will be asked for personal information that will then be shared directly with Refik Anadol so they can fulfill your request. You can reach them on Discord through your designated exhibition channel if you have any followup questions.</p>
       <div class="btn-set">
         <button class="primary">Connect</button>
       </div>
