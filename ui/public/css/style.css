@@ -3,6 +3,8 @@ html, body {
 	font-family: 'Atlas Grotesk';
 	font-weight: 300;
 	width: 100%;
+	height: 1px;
+	min-height: 100%;
 	margin: 0;
 }
 
@@ -30,7 +32,6 @@ strong {
 .text-center {
 	text-align: center;
 }
-
 
 a {
 	color: #000;
@@ -66,6 +67,11 @@ a.btn.primary:hover {
 	background: #4448BB;
 }
 
+button.secondary,
+a.btn.secondary {
+	border: 1px solid #000;
+}
+
 form {
 	margin-bottom: 2rem;
 }
@@ -79,6 +85,11 @@ label {
 	font-size: .75rem;
 	font-weight: 700;
 	margin-bottom: .25rem;
+}
+
+input::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+	color: #777;
+	opacity: 1; /* Firefox */
 }
 
 input[type=text],
@@ -124,30 +135,6 @@ textarea:focus {
 	background: unset;
 	border: 2px solid #000;
 }
-.autocomplete-items {
-	position: absolute;
-	background: #fff;
-	width: calc(100% - 4px);
-	border: 2px solid #000;
-	border-top: none;
-	max-height: 10rem;
-	overflow-y: auto;
-}
-.autocomplete-items > div {
-	min-height: 2.5rem;
-	padding: 0 1rem;
-	display: flex;
-	align-items: center;
-	cursor: pointer;
-}
-.autocomplete-items > div:hover {
-	background: #000;
-	color: #fff;
-}
-
-.autocomplete-items > div strong {
-	font-size: 1rem;
-}
 
 ol {
 	padding: 0 1.2rem;
@@ -156,6 +143,11 @@ ol {
 
 ol li {
 	margin-bottom: .5rem;
+}
+
+div#app.wrapper {
+	width: 100%;
+	height: 100%;
 }
 
 header {
@@ -192,8 +184,24 @@ header {
 	font-weight: 700;
 }
 
+.wallet {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.wallet span {
+	display: none;
+	font-size: .875rem;
+}
+
+.wallet button {
+	margin-left: .5rem;
+}
+
 main {
 	padding: 0 1.5rem;
+	box-sizing: border-box;
 }
 
 .two-col {
@@ -209,6 +217,17 @@ main {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
 	grid-gap: .5rem;
+	min-height: 32.15rem;
+	background: #eee;
+}
+
+.grids p.no-work {
+	grid-column: 1 / -1;
+	grid-row: 1 / -1;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: #777;
 }
 
 .grids .card {
@@ -264,8 +283,76 @@ main {
 	width: 100%;
 }
 
-footer {
+.modal {
+	display: none;
+	position: fixed;
+	width: 100vw;
+	height: 100vh;
+	top:0;
+	left: 0;
+	z-index: 99;
+	background: rgba(0,0,0,.35);
+	justify-content: center;
+	align-items: center;
 }
+
+.modal.show {
+	display: flex;
+}
+
+.modal-inner {
+	width: 30rem;
+	height: 16rem;
+	background: #fff;
+	display: grid;
+	grid-template-columns: 1fr;
+	grid-template-rows: 2rem 1fr 6rem;
+}
+
+.modal-body {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.modal-foot {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.modal-foot .btn-set {
+	margin: 0;
+}
+
+/*----
+.chnMFN {
+	width: 30rem !important;
+	height: 25rem !important;
+	border-radius: 0 !important;
+	grid-template-columns: 24rem !important;
+	grid-template-rows: 3rem !important;
+}
+.jcNZzC {
+	flex-direction: row !important;
+	padding: 0 !important;
+	height: 3rem;
+}
+.jMhaxE {
+	width: 1.5rem !important;
+	height: 1.5rem !important;
+}
+.bktcUM {
+	margin-top: 0 !important;
+	text-align: left;
+	padding-left: 1.5rem;
+	font-size: .875rem !important;
+}
+.eFHlqH {
+	display: none;
+}
+----*/
 
 @media screen and (min-width: 576px) {
 	html, body {
@@ -288,6 +375,9 @@ footer {
 	}
 }
 @media screen and (min-width: 1024px) {
+	.wallet span {
+		display: inline;
+	}
 	.two-col {
 		grid-template-columns: 1fr 1fr;
 		grid-column-gap: 2rem;

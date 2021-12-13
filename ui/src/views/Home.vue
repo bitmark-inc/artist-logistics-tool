@@ -1,197 +1,212 @@
 <template>
-  <div class="wrapper">
-    <header>
-      <a class="brand" href="home-signed-in.html">
-        <img src="img/au.svg" />
-        <h2>Autonomy<!--<span> Market<span>--></h2>
-      </a>
-      <p v-if="web3 == null">
-        <button @click="this.web3Login" :disabled="web3">Connect</button>
-      </p>
-      <p v-else>
-        <span>{{ accountNumber }}</span>
-        <button @click="this.web3Logout" :disabled="!web3">Disconnect</button>
-      </p>
-    </header>
+  <div>
+      <header>
+        <a class="brand">
+          <img src="img/au.svg" />
+          <h2>Autonomy<!--<span> Market<span>--></h2>
+        </a>
+        <p class="wallet" v-if="web3 == null">
+          <button class="secondary" @click="this.web3Login" :disabled="web3">Connect</button>
+        </p>
+        <p class="wallet" v-else>
+          <span>{{ accountNumber }}</span>
+          <button class="secondary" @click="this.web3Logout" :disabled="!web3">Disconnect</button>
+        </p>
+      </header>
 
-    <main>
-      <h2 class="text-center">Collect Refik Anadol's Signed Prints</h2>
-      <ol>
-        <li>
-          Select {{ maxSelectableNumber }} desired items in the following
-          artwork grid.
-        </li>
-        <li>Fill in the shipping information.</li>
-        <li>Confirm and click "Send".</li>
-      </ol>
-      <div class="two-col">
-        <div class="left">
-          <h3>I. Select Artworks</h3>
-          <strong style="display: block; margin-bottom: 0.5rem">
-            * Please select {{ maxSelectableNumber }} items from your collected
-            digital editions for signed prints. Remaining:
-            {{ maxSelectableNumber - totalSelected }}
-          </strong>
-          <div class="grids">
-            <div
-              class="card"
-              :class="{ selected: token.selected }"
-              v-for="token in tokens"
-              :key="token.id"
-              @click="selectToken(token)"
-            >
+      <main>
+        <h2 class="text-center">Collect Refik Anadol's Signed Prints</h2>
+        <ol>
+          <li>
+            Select {{ maxSelectableNumber }} desired items in the following
+            artwork grid.
+          </li>
+          <li>Fill in the shipping information.</li>
+          <li>Confirm and click "Send".</li>
+        </ol>
+        <div class="two-col">
+          <div class="left">
+            <h3>I. Select Artworks</h3>
+            <strong style="display: block; margin-bottom: 0.5rem">
+              * Please select {{ maxSelectableNumber }} items from your collected
+              digital editions for signed prints. Remaining:
+              {{ maxSelectableNumber - totalSelected }}
+            </strong>
+            <div class="grids">
+              <p class="no-work">There's no artwork to show.</p>
               <div
-                class="image"
-                :style="{ 'background-image': 'url(' + token.imageURL + ')' }"
-              ></div>
-              <div class="info">
-                <p>{{ token.name }}</p>
+                class="card"
+                :class="{ selected: token.selected }"
+                v-for="token in tokens"
+                :key="token.id"
+                @click="selectToken(token)"
+              >
+                <div
+                  class="image"
+                  :style="{ 'background-image': 'url(' + token.imageURL + ')' }"
+                ></div>
+                <div class="info">
+                  <p>{{ token.name }}</p>
+                </div>
               </div>
             </div>
           </div>
+          <div class="right">
+            <h3>II. Fill Out the Following Information</h3>
+            <form>
+              <div class="row">
+                <label>Name *</label>
+                <div
+                  style="
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    column-gap: 0.5rem;
+                  "
+                >
+                  <input
+                    type="text"
+                    id="first"
+                    name="first"
+                    placeholder="First Name"
+                    v-model="form.firstName"
+                  />
+                  <input
+                    type="text"
+                    id="last"
+                    name="last"
+                    placeholder="Last Name"
+                    v-model="form.lastName"
+                  />
+                </div>
+              </div>
+              <div class="row">
+                <label for="email">Email *</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  placeholder="eg. john@bitmark.com"
+                  v-model="form.email"
+                />
+              </div>
+              <div class="row">
+                <label>Shipping Address *</label>
+                <input
+                  type="text"
+                  id="street1"
+                  name="street1"
+                  placeholder="Address Line 1"
+                  v-model="form.address1"
+                />
+              </div>
+              <div class="row">
+                <input
+                  type="text"
+                  id="street2"
+                  name="street2"
+                  placeholder="Address Line 2"
+                  v-model="form.address2"
+                />
+              </div>
+              <div class="row">
+                <input
+                  type="text"
+                  id="city"
+                  name="city"
+                  placeholder="City"
+                  v-model="form.city"
+                />
+              </div>
+              <div class="row">
+                <div
+                  style="
+                    display: grid;
+                    grid-template-columns: 2fr 1fr;
+                    column-gap: 0.5rem;
+                  "
+                >
+                  <input
+                    type="text"
+                    id="state"
+                    name="state"
+                    placeholder="State or Province"
+                    v-model="form.state"
+                  />
+                  <input
+                    type="tel"
+                    id="postcode"
+                    name="postcode"
+                    placeholder="Postcode"
+                    v-model="form.postcode"
+                  />
+                </div>
+              </div>
+              <div class="row" style="position: relative">
+                <input
+                  type="text"
+                  id="country"
+                  name="country"
+                  placeholder="Country"
+                  v-model="form.country"
+                />
+              </div>
+              <div class="row">
+                <label for="phone">Phone Number</label>
+                <div
+                  style="
+                    display: grid;
+                    grid-template-columns: 1fr 2fr;
+                    column-gap: 0.5rem;
+                  "
+                >
+                  <input
+                    type="text"
+                    id="countrycode"
+                    name="countrycode"
+                    placeholder="Country Code"
+                    v-model="form.phoneCountryCode"
+                  />
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    placeholder="Phone Number"
+                    v-model="form.phoneNumber"
+                  />
+                </div>
+              </div>
+            </form>
+            <h3>III. Ready to Send</h3>
+            <p>
+              Please double check your desired artworks and make sure the above
+              shipping information is valid before you click "send".
+            </p>
+            <div class="btn-set">
+              <button type="button" class="primary" id="send" @click="submit">
+                Send
+              </button>
+              <button type="button" @click="reset">Reset</button>
+            </div>
+          </div>
         </div>
-        <div class="right">
-          <h3>II. Fill Out the Following Information</h3>
-          <form>
-            <div class="row">
-              <label>Name *</label>
-              <div
-                style="
-                  display: grid;
-                  grid-template-columns: 1fr 1fr;
-                  column-gap: 0.5rem;
-                "
-              >
-                <input
-                  type="text"
-                  id="first"
-                  name="first"
-                  placeholder="First Name"
-                  v-model="form.firstName"
-                />
-                <input
-                  type="text"
-                  id="last"
-                  name="last"
-                  placeholder="Last Name"
-                  v-model="form.lastName"
-                />
-              </div>
+      </main>
+
+      <div class="modal">
+        <div class="modal-inner">
+          <div class="modal-head"></div>
+          <div class="modal-body">
+            <h3>Error</h3>
+            <p>You don't have NFTs.</p>
+          </div>
+          <div class="modal-foot">
+            <div class="btn-set">
+              <button class="btn primary">Okay</button>
             </div>
-            <div class="row">
-              <label for="email">Email *</label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                placeholder="eg. john@bitmark.com"
-                v-model="form.email"
-              />
-            </div>
-            <div class="row">
-              <label>Shipping Address *</label>
-              <input
-                type="text"
-                id="street1"
-                name="street1"
-                placeholder="Address Line 1"
-                v-model="form.address1"
-              />
-            </div>
-            <div class="row">
-              <input
-                type="text"
-                id="street2"
-                name="street2"
-                placeholder="Address Line 2"
-                v-model="form.address2"
-              />
-            </div>
-            <div class="row">
-              <input
-                type="text"
-                id="city"
-                name="city"
-                placeholder="City"
-                v-model="form.city"
-              />
-            </div>
-            <div class="row">
-              <div
-                style="
-                  display: grid;
-                  grid-template-columns: 2fr 1fr;
-                  column-gap: 0.5rem;
-                "
-              >
-                <input
-                  type="text"
-                  id="state"
-                  name="state"
-                  placeholder="State or Province"
-                  v-model="form.state"
-                />
-                <input
-                  type="tel"
-                  id="postcode"
-                  name="postcode"
-                  placeholder="Postcode"
-                  v-model="form.postcode"
-                />
-              </div>
-            </div>
-            <div class="row" style="position: relative">
-              <input
-                type="text"
-                id="country"
-                name="country"
-                placeholder="Country"
-                v-model="form.country"
-              />
-            </div>
-            <div class="row">
-              <label for="phone">Phone Number</label>
-              <div
-                style="
-                  display: grid;
-                  grid-template-columns: 1fr 2fr;
-                  column-gap: 0.5rem;
-                "
-              >
-                <input
-                  type="text"
-                  id="countrycode"
-                  name="countrycode"
-                  placeholder="Country Code"
-                  v-model="form.phoneCountryCode"
-                />
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  placeholder="Phone Number"
-                  v-model="form.phoneNumber"
-                />
-              </div>
-            </div>
-          </form>
-          <h3>III. Ready to Send</h3>
-          <p>
-            Please double check your desired artworks and make sure the above
-            shipping information is valid before you click "send".
-          </p>
-          <div class="btn-set">
-            <button type="button" class="primary" id="send" @click="submit">
-              Send
-            </button>
-            <button type="button" @click="reset">Reset</button>
           </div>
         </div>
       </div>
-    </main>
-
-    <footer></footer>
   </div>
+
 </template>
 
 <script lang="ts">
