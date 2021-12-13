@@ -1,3 +1,18 @@
+<style scoped>
+.names {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 0.5rem;
+}
+@media screen and (min-width: 1024px) {
+
+.names {
+    grid-template-columns: 1fr 1fr;
+    row-gap: 0;
+  }
+}
+</style>
+
 <template>
   <div>
       <header>
@@ -56,123 +71,60 @@
             <form>
               <div class="row">
                 <label>Name *</label>
-                <div
-                  style="
-                    display: grid;
-                    grid-template-columns: 1fr 1fr;
-                    column-gap: 0.5rem;
-                  "
-                >
-                  <input
-                    type="text"
-                    id="first"
-                    name="first"
-                    placeholder="First Name"
-                    v-model="form.firstName"
-                  />
-                  <input
-                    type="text"
-                    id="last"
-                    name="last"
-                    placeholder="Last Name"
-                    v-model="form.lastName"
-                  />
+                <div class="names">
+                  <input type="text" id="first" name="first" placeholder="First Name" v-model="form.firstName" />
+                  <input type="text" id="last" name="last" placeholder="Last Name" v-model="form.lastName" />
+                  <div class="input-errors">
+                    <div class="error-msg">Please fill in your first name</div>
+                  </div>
                 </div>
               </div>
               <div class="row">
                 <label for="email">Email *</label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  placeholder="eg. john@bitmark.com"
-                  v-model="form.email"
-                />
+                <input type="email" id="email" name="email" placeholder="eg. john@bitmark.com" v-model="form.email" />
+                <div class="input-errors">
+                  <div class="error-msg">Please fill in your email</div>
+                </div>
               </div>
               <div class="row">
                 <label>Shipping Address *</label>
-                <input
-                  type="text"
-                  id="street1"
-                  name="street1"
-                  placeholder="Address Line 1"
-                  v-model="form.address1"
-                />
+                <input type="text" id="street1" name="street1" placeholder="Address Line 1" v-model="form.address1" />
+                <div class="input-errors">
+                  <div class="error-msg">Please fill in your address</div>
+                </div>
               </div>
               <div class="row">
-                <input
-                  type="text"
-                  id="street2"
-                  name="street2"
-                  placeholder="Address Line 2"
-                  v-model="form.address2"
-                />
+                <input type="text" id="street2" name="street2" placeholder="Address Line 2" v-model="form.address2" />
               </div>
               <div class="row">
-                <input
-                  type="text"
-                  id="city"
-                  name="city"
-                  placeholder="City"
-                  v-model="form.city"
-                />
+                <input type="text" id="city" name="city" placeholder="City" v-model="form.city" />
+                <div class="input-errors">
+                  <div class="error-msg">Please fill in your city</div>
+                </div>
               </div>
               <div class="row">
-                <div
-                  style="
-                    display: grid;
-                    grid-template-columns: 2fr 1fr;
-                    column-gap: 0.5rem;
-                  "
-                >
-                  <input
-                    type="text"
-                    id="state"
-                    name="state"
-                    placeholder="State or Province"
-                    v-model="form.state"
-                  />
-                  <input
-                    type="tel"
-                    id="postcode"
-                    name="postcode"
-                    placeholder="Postcode"
-                    v-model="form.postcode"
-                  />
+                <div style=" display: grid; grid-template-columns: 2fr 1fr; column-gap: 0.5rem;" >
+                  <input type="text" id="state" name="state" placeholder="State or Province" v-model="form.state" />
+                  <input type="tel" id="postcode" name="postcode" placeholder="Postcode" v-model="form.postcode" />
+                  <div class="input-errors">
+                    <div class="error-msg">Please fill in your state</div>
+                  </div>
                 </div>
               </div>
               <div class="row" style="position: relative">
-                <input
-                  type="text"
-                  id="country"
-                  name="country"
-                  placeholder="Country"
-                  v-model="form.country"
-                />
+                <input type="text" id="country" name="country" placeholder="Country" v-model="form.country" />
+                <div class="input-errors">
+                  <div class="error-msg">Please fill in your country</div>
+                </div>
               </div>
               <div class="row">
-                <label for="phone">Phone Number</label>
-                <div
-                  style="
-                    display: grid;
-                    grid-template-columns: 1fr 2fr;
-                    column-gap: 0.5rem;
-                  "
-                >
-                  <input
-                    type="text"
-                    id="countrycode"
-                    name="countrycode"
-                    placeholder="Country Code"
-                    v-model="form.phoneCountryCode"
-                  />
-                  <input
-                    type="tel"
-                    id="phone"
-                    name="phone"
-                    placeholder="Phone Number"
-                    v-model="form.phoneNumber"
-                  />
+                <label for="phone">Phone Number *</label>
+                <div style=" display: grid; grid-template-columns: 1fr 2fr; column-gap: 0.5rem; " >
+                  <input type="text" id="countrycode" name="countrycode" placeholder="Country Code" v-model="form.phoneCountryCode" />
+                  <input type="tel" id="phone" name="phone" placeholder="Phone Number" v-model="form.phoneNumber" />
+                </div>
+                <div class="input-errors">
+                  <div class="error-msg">Please fill in your phone number</div>
                 </div>
               </div>
             </form>
