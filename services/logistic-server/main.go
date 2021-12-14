@@ -107,6 +107,19 @@ func main() {
 			return
 		}
 
+		ok, err := db.ValidateOwnedArtworks(requester, req.Tokens)
+		if err != nil {
+			logrus.WithError(err).Error("can not get requester data from db")
+			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "can not get requester data from db"})
+			return
+		}
+
+		if !ok {
+			logrus.WithField("requester", requester).WithField("tokens", req.Tokens).Error("invalid NFT ownership detected")
+			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "invalid NFT ownership detected"})
+			return
+		}
+
 		b, _ := json.Marshal(req.Tokens)
 
 		if err := db.SaveShipmentInformation("refik-001", requester, req.Information, b); err != nil {

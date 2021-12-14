@@ -78,6 +78,15 @@ func (s *LogisticStore) QueryOwnedArtworks(address string) ([]ArtworkOwnershipSn
 	return artworks, nil
 }
 
+func (s *LogisticStore) ValidateOwnedArtworks(address string, tokenIDs []string) (bool, error) {
+	var ownedTokenCount int64
+	if err := s.db.Model(ArtworkOwnershipSnapshot{}).Where("owner_address = ? AND token_id IN ?", address, tokenIDs).Count(&ownedTokenCount).Error; err != nil {
+		return false, err
+	}
+
+	return int(ownedTokenCount) == len(tokenIDs), nil
+}
+
 func (s *LogisticStore) SaveShipmentInformation(logisticID, ownerAddress string, information ShipmentInformation, data json.RawMessage) error {
 	info := LogisticShipmentInformation{
 		ShipmentInformation: information,
