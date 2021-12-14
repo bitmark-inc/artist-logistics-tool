@@ -269,10 +269,16 @@ const imageSrc: StringMap = {
       const provider = await this.$web3Modal.connect();
 
       this.web3 = new Web3(provider);
-      window.ethereum.on("accountsChanged", (accounts: Array<string>) => {
-        console.log("ethereum accounts changed");
-        this.accountNumber = accounts[0];
-      });
+      if (this.$web3Modal.cachedProvider === "injected") {
+        try {
+          window.ethereum.on("accountsChanged", (accounts: Array<string>) => {
+            console.log("ethereum accounts changed");
+            this.accountNumber = accounts[0];
+          });
+        } catch (error) {
+          console.log("can not listen to account changed events");
+        }
+      }
 
       this.contract = new this.web3.eth.Contract(
         exhibitionABI.abi as AbiItem[],
@@ -288,7 +294,7 @@ const imageSrc: StringMap = {
         this.apiRoot + "/api/owned/" + this.queryAccount
       );
 
-      if (resp.data.artworks.length == 0) {
+      if (resp.data.artworks.length < 3) {
         this.$router.push({ name: "Nothing" });
       }
 

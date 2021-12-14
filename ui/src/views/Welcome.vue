@@ -68,7 +68,7 @@ import { Options, Vue } from "vue-class-component";
 
   methods: {
     async web3Connect() {
-      const provider = await this.$web3Modal.connect();
+      await this.$web3Modal.connect();
       this.$router.push({ name: "Home" });
     },
   },
