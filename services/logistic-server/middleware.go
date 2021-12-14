@@ -11,6 +11,7 @@ import (
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
 	"golang.org/x/crypto/sha3"
 
 	"github.com/bitmark-inc/bitmark-sdk-go/account"
@@ -90,7 +91,7 @@ func validateBitmarkSignature(requester, token string) error {
 	signature := tokenBytes[0:64]
 
 	message := string(tokenBytes[64:])
-	if message != "testtest" {
+	if message != viper.GetString("feralfile.preset_message") {
 		return fmt.Errorf("invalid payload")
 	}
 
