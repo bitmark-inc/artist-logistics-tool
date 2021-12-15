@@ -4,6 +4,10 @@
   grid-template-columns: 1fr;
   grid-gap: 0.5rem;
 }
+p.note {
+  color: #555;
+  font-size: .75rem;
+}
 @media screen and (min-width: 1024px) {
 
 .names {
@@ -65,6 +69,7 @@
                 </div>
               </div>
             </div>
+            <p class="note">Something missing? Contact <a href="mailto:support@feralfile.com">support@feralfile.com</a> with your Feral File alias or email. </p>
           </div>
           <div class="right">
             <h3>II. Fill Out the Following Information</h3>

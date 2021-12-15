@@ -12,17 +12,10 @@
   }
   .login {
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
   }
-  .login img {
-    width: 4rem;
-  }
-  .login h1 {
-    font-family: 'Domaine Sans';
-    text-transform: uppercase;
-    font-weight: 400;
+  .login h2 {
+    text-align: left;
+    margin-bottom: 2rem;
   }
   .login hr {
     width: 1.75rem;
@@ -31,12 +24,39 @@
     margin-bottom: 2rem;
   }
   .login p.des {
-    margin: 0 0 2rem;
-    text-align: justify;
+    width: 100%;
+    margin: 0 0 1rem;
+  }
+  .login ul {
+    width: 100%;
+    margin: 0 0 2.5rem;
+    padding-left: 1.25rem;
+    box-sizing: border-box;
+  }
+  .login button {
+    width: 100%;
+  }
+  .brand {
+    display: flex;
+    margin-top: 4rem;
+  }
+  .brand img {
+    width: 3rem;
+  }
+  .brand h2 {
+    position: relative;
+    top: .075rem;
+    font-family: 'Domaine Sans';
+    text-transform: uppercase;
+    font-weight: 400;
+    margin: 0;
   }
   @media screen and (min-width: 768px) {
     .login {
-      width: 50%;
+      width: fit-content;
+    }
+    .login button {
+      width: 20rem;
     }
   }
 </style>
@@ -44,12 +64,17 @@
 <template>
   <main>
     <div class="login">
-      <img src="img/au.svg" alt="">
-      <h1>Autonomy</h1>
-      <hr>
-      <p class="des">Get started by clicking the Connect button below - you will be asked for personal information that will then be shared directly with Refik Anadol so they can fulfill your request. You can reach them on <a href="https://discord.gg/vXvpeETTD6" blank="target">Discord</a> through your designated exhibition channel if you have any followup questions.</p>
-      <div class="btn-set">
-        <button class="primary" @click="web3Connect">Connect</button>
+      
+      <h2>Refik Anadol Unsupervised Physical Print Redemption</h2>
+      <p class="des">Connect your crypto wallet to verify ownership:</p>
+      <ul>
+        <li>You will be asked to share your wallet address to verify ownership.</li>
+        <li>You will be asked for shipping information so that Refik Anadol can fulfill your request.</li>
+      </ul>
+      <button class="primary" @click="web3Connect">Get Started</button>
+      <div class="brand">
+        <img src="img/au.svg" alt="">
+        <h2>Autonomy</h2>
       </div>
     </div>
   </main>
