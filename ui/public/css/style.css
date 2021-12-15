@@ -58,6 +58,7 @@ a.btn {
 	cursor: pointer;
 	outline: none;
 	transition: .2s;
+	color: #000;
 }
 
 button.primary,
