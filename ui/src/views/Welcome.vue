@@ -1,15 +1,40 @@
 <style scoped>
-  .wrapper {
-    width: 100%;
-    height: 100%;
-  }
-  main {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+.wrapper {
+  width: 100%;
+  height: 100%;
+}
+main {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.login {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.login img {
+  width: 4rem;
+}
+.login h1 {
+  font-family: "Domaine Sans";
+  text-transform: uppercase;
+  font-weight: 400;
+}
+.login hr {
+  width: 1.75rem;
+  border: none;
+  border-top: 3px solid #000;
+  margin-bottom: 2rem;
+}
+.login p.des {
+  margin: 0 0 2rem;
+  text-align: justify;
+}
+@media screen and (min-width: 768px) {
   .login {
     width: 100%;
   }
@@ -59,6 +84,7 @@
       width: 20rem;
     }
   }
+}
 </style>
 
 <template>
@@ -93,7 +119,7 @@ import { Options, Vue } from "vue-class-component";
 
   methods: {
     async web3Connect() {
-      const provider = await this.$web3Modal.connect();
+      await this.$web3Modal.connect();
       this.$router.push({ name: "Home" });
     },
   },

@@ -1,0 +1,12 @@
+ui_path: /usr/share/ui
+
+log:
+  level: debug
+
+network: testnet
+
+feralfile:
+  preset_message: testtest
+
+store:
+  dsn: host=localhost user=test password=test dbname=db port=5432
