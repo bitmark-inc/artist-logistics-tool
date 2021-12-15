@@ -1,46 +1,21 @@
 <style scoped>
-.wrapper {
-  width: 100%;
-  height: 100%;
-}
-main {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.login {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.login img {
-  width: 4rem;
-}
-.login h1 {
-  font-family: "Domaine Sans";
-  text-transform: uppercase;
-  font-weight: 400;
-}
-.login hr {
-  width: 1.75rem;
-  border: none;
-  border-top: 3px solid #000;
-  margin-bottom: 2rem;
-}
-.login p.des {
-  margin: 0 0 2rem;
-  text-align: justify;
-}
-@media screen and (min-width: 768px) {
+  .wrapper {
+    width: 100%;
+    height: 100%;
+  }
+  main {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
   .login {
     width: 100%;
   }
   .login h2 {
     text-align: left;
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
   }
   .login hr {
     width: 1.75rem;
@@ -66,7 +41,7 @@ main {
     margin-top: 4rem;
   }
   .brand img {
-    width: 3rem;
+    width: 2.5rem;
   }
   .brand h2 {
     position: relative;
@@ -74,6 +49,7 @@ main {
     font-family: 'Domaine Sans';
     text-transform: uppercase;
     font-weight: 400;
+    font-size: 1.5rem;
     margin: 0;
   }
   @media screen and (min-width: 768px) {
@@ -84,7 +60,6 @@ main {
       width: 20rem;
     }
   }
-}
 </style>
 
 <template>
@@ -119,7 +94,7 @@ import { Options, Vue } from "vue-class-component";
 
   methods: {
     async web3Connect() {
-      await this.$web3Modal.connect();
+      const provider = await this.$web3Modal.connect();
       this.$router.push({ name: "Home" });
     },
   },
