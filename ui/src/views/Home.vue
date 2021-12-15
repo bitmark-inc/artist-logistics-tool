@@ -58,8 +58,8 @@ p.note {
                 <p>{{ token.name }}</p>
               </div>
             </div>
-            <p class="note">Something missing? Contact <a href="mailto:support@feralfile.com">support@feralfile.com</a> with your Feral File alias or email. </p>
           </div>
+          <p class="note">Something missing? Contact <a href="mailto:support@feralfile.com">support@feralfile.com</a> with your Feral File alias or email. </p>
         </div>
         <div class="right">
           <h3>II. Fill Out the Following Information</h3>
