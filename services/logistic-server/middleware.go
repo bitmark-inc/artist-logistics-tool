@@ -35,7 +35,10 @@ func ecrecover(message, signature []byte) (string, error) {
 		return "", fmt.Errorf("invalid length of signature")
 	}
 
-	signature[64] -= 27
+	// Version of signature should be 27 or 28, but 0 and 1 are also possible versions
+	if signature[64] >= 27 {
+		signature[64] -= 27
+	}
 
 	pubKey, err := crypto.SigToPub(hash, signature[:])
 	if err != nil {
