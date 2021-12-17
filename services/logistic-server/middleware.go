@@ -115,18 +115,19 @@ func authorization() gin.HandlerFunc {
 			return
 		}
 
+		authToken := authStrings[1]
 		// requester starts with "0x" would be treated as an ethereum account
 		if requester[0:2] == "0x" {
-			if err := validateEthereumSignature(requester, authStrings[1]); err != nil {
-				logrus.WithError(err).Error("invalid ethereum signature")
+			if err := validateEthereumSignature(requester, authToken); err != nil {
+				logrus.WithError(err).WithField("requester", requester).WithField("authToken", authToken).Error("invalid ethereum signature")
 				c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 					"error": "invalid signature",
 				})
 				return
 			}
 		} else {
-			if err := validateBitmarkSignature(requester, authStrings[1]); err != nil {
-				logrus.WithError(err).Error("invalid bitmark signature")
+			if err := validateBitmarkSignature(requester, authToken); err != nil {
+				logrus.WithError(err).WithField("requester", requester).WithField("authToken", authToken).Error("invalid bitmark signature")
 				c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 					"error": "invalid signature",
 				})
