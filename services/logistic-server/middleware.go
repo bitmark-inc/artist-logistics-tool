@@ -71,7 +71,7 @@ func validateEthereumSignature(requester, token string) error {
 	nsec := t & 1000
 	reqTime := time.Unix(int64(sec), int64(nsec))
 
-	if time.Since(reqTime) > 5*time.Second {
+	if time.Since(reqTime) > 5*time.Minute {
 		return fmt.Errorf("token expired")
 	}
 
