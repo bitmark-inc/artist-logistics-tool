@@ -59,14 +59,12 @@ func validateEthereumSignature(requester, token string) error {
 	}
 
 	signature := tokenBytes[0:65]
-
 	message := tokenBytes[65:]
-	addr, err := ecrecover(message, signature)
-	if err != nil {
-		return err
-	}
 
-	t, _ := strconv.Atoi(string(message))
+	t, err := strconv.Atoi(string(message))
+	if err != nil {
+		return fmt.Errorf("fail to parse timestamp. error: %s", err.Error())
+	}
 	sec := t / 1000
 	nsec := t & 1000
 	reqTime := time.Unix(int64(sec), int64(nsec))
@@ -75,8 +73,12 @@ func validateEthereumSignature(requester, token string) error {
 		return fmt.Errorf("token expired")
 	}
 
+	addr, err := ecrecover(message, signature)
+	if err != nil {
+		return err
+	}
 	if addr != requester {
-		return fmt.Errorf("invalid signature")
+		return fmt.Errorf("signature is mismatched with the requester address")
 	}
 
 	return nil
