@@ -12,3 +12,6 @@ feralfile:
 
 store:
   dsn: host=localhost user=test password=test dbname=db port=5432
+
+ethereum:
+  rpc_url: https://mainnet.infura.io/v3/<infura-id>
