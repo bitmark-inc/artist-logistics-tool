@@ -6,7 +6,7 @@
 }
 p.note {
   color: #555;
-  font-size: .75rem;
+  font-size: 0.75rem;
 }
 @media screen and (min-width: 1024px) {
   .names {
@@ -479,12 +479,12 @@ const imageSrc: StringMap = {
             required
           ),
         },
-        phoneCountryCode: {
-          required: helpers.withMessage(
-            "Please fill in your phone country code",
-            required
-          ),
-        },
+        // phoneCountryCode: {
+        //   required: helpers.withMessage(
+        //     "Please fill in your phone country code",
+        //     required
+        //   ),
+        // },
         phoneNumber: {
           required: helpers.withMessage(
             "Please fill in your phone number",
@@ -512,7 +512,7 @@ const imageSrc: StringMap = {
         state: "",
         postcode: "",
         country: "",
-        phoneCountryCode: "",
+        // phoneCountryCode: "",
         phoneNumber: "",
       },
       tokens: [],
