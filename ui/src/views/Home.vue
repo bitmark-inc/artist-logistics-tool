@@ -79,7 +79,7 @@ p.note {
             </div>
             <div class="row">
               <label for="email">Email *</label>
-              <input type="email" id="email" name="email" placeholder="eg. john@bitmark.com" v-model="form.email" />
+              <input type="email" id="email" name="email" placeholder="eg. john@bitmark.com" autocomplete="email" v-model="form.email" />
               <div class="input-errors" v-for="(error, index) of v$.form.email.$errors" :key="index">
                 <div class="error-msg">{{ error.$message }}</div>
               </div>
@@ -120,13 +120,13 @@ p.note {
             </div>
             <div class="row">
               <label for="phone">Phone Number *</label>
-              <div style=" display: grid; grid-template-columns: 1fr 2fr; column-gap: 0.5rem; ">
-                <input type="text" id="countrycode" name="countrycode" placeholder="Country Code" v-model="form.phoneCountryCode" />
-                <input type="tel" id="phone" name="phone" placeholder="Phone Number" v-model="form.phoneNumber" />
+              <div>
+                <!--<input type="text" id="countrycode" name="countrycode" placeholder="Country Code" autocomplete="tel" v-model="form.phoneCountryCode" />-->
+                <input type="tel" id="phone" name="phone" placeholder="Phone Number (With Country Code)" autocomplete="tel" v-model="form.phoneNumber" />
               </div>
-              <div class="input-errors" v-for="(error, index) of v$.form.phoneCountryCode.$errors" :key="index">
+              <!--<div class="input-errors" v-for="(error, index) of v$.form.phoneCountryCode.$errors" :key="index">
                 <div class="error-msg">{{ error.$message }}</div>
-              </div>
+              </div>-->
               <div class="input-errors" v-for="(error, index) of v$.form.phoneNumber.$errors" :key="index">
                 <div class="error-msg">{{ error.$message }}</div>
               </div>
