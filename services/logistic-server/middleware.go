@@ -35,7 +35,10 @@ func ecrecover(message, signature []byte) (string, error) {
 		return "", fmt.Errorf("invalid length of signature")
 	}
 
-	signature[64] -= 27
+	// Version of signature should be 27 or 28, but 0 and 1 are also possible versions
+	if signature[64] >= 27 {
+		signature[64] -= 27
+	}
 
 	pubKey, err := crypto.SigToPub(hash, signature[:])
 	if err != nil {
@@ -68,7 +71,7 @@ func validateEthereumSignature(requester, token string) error {
 	nsec := t & 1000
 	reqTime := time.Unix(int64(sec), int64(nsec))
 
-	if time.Since(reqTime) > 5*time.Second {
+	if time.Since(reqTime) > 5*time.Minute {
 		return fmt.Errorf("token expired")
 	}
 
@@ -112,18 +115,19 @@ func authorization() gin.HandlerFunc {
 			return
 		}
 
+		authToken := authStrings[1]
 		// requester starts with "0x" would be treated as an ethereum account
 		if requester[0:2] == "0x" {
-			if err := validateEthereumSignature(requester, authStrings[1]); err != nil {
-				logrus.WithError(err).Error("invalid ethereum signature")
+			if err := validateEthereumSignature(requester, authToken); err != nil {
+				logrus.WithError(err).WithField("requester", requester).WithField("authToken", authToken).Error("invalid ethereum signature")
 				c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 					"error": "invalid signature",
 				})
 				return
 			}
 		} else {
-			if err := validateBitmarkSignature(requester, authStrings[1]); err != nil {
-				logrus.WithError(err).Error("invalid bitmark signature")
+			if err := validateBitmarkSignature(requester, authToken); err != nil {
+				logrus.WithError(err).WithField("requester", requester).WithField("authToken", authToken).Error("invalid bitmark signature")
 				c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 					"error": "invalid signature",
 				})

@@ -28,10 +28,13 @@ func main() {
 	db := logistics.NewLogisticStore(viper.GetString("store.dsn"))
 
 	router := gin.New()
-	corsConf := cors.DefaultConfig()
-	corsConf.AllowAllOrigins = true
-	corsConf.AddAllowHeaders("Authorization", "Requester")
-	router.Use(cors.New(corsConf))
+
+	if viper.GetBool("development") {
+		corsConf := cors.DefaultConfig()
+		corsConf.AllowAllOrigins = true
+		corsConf.AddAllowHeaders("Authorization", "Requester")
+		router.Use(cors.New(corsConf))
+	}
 
 	apiRouter := router.Group("/api")
 	apiRouter.GET("/owned/:requester", func(c *gin.Context) {

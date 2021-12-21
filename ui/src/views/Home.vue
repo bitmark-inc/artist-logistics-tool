@@ -341,7 +341,7 @@ const imageSrc: StringMap = {
     },
 
     web3Logout() {
-      if (this.$web3Modal.cachedProvider == "wallet connect") {
+      if (this.$web3Modal.cachedProvider == "walletconnect") {
         this.web3.eth.currentProvider.disconnect();
       }
       this.$web3Modal.clearCachedProvider();
