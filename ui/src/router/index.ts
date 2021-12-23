@@ -3,6 +3,8 @@ import Home from '../views/Home.vue'
 import Welcome from '../views/Welcome.vue'
 import ThankYou from '../views/ThankYou.vue'
 import Nothing from '../views/Nothing.vue'
+import NotFound from '../views/NotFound.vue'
+import Graph002 from '../views/Graph002.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -21,9 +23,19 @@ const routes: Array<RouteRecordRaw> = [
     component: ThankYou
   },
   {
+    path: '/-graph',
+    name: 'Graph002',
+    component: Graph002
+  },
+  {
     path: '/nothing',
     name: 'Nothing',
     component: Nothing
+  },
+  {
+    path: '/404',
+    name: 'NotFound',
+    component: NotFound
   },
   // {
   //   path: '/about',
