@@ -48,7 +48,8 @@ main {
       <img src="img/au.svg" alt="">
       <h1>Autonomy</h1>
       <hr>
-      <p class="des">We were unable to find any artworks under your control that qualify for receiving prints. Please contact Refik Anadol through your designated exhibition channel if you have any followup questions.</p>
+      <h2>404 Not Found</h2>
+      <p class="des">Sorry! We couldn't find what you were requested. Please contact <a href="mailto:support@feralfile.com">support@feralfile.com</a> with your Feral File alias or email.</p>
     </div>
   </main>
 </template>

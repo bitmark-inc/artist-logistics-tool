@@ -31,22 +31,20 @@ p.note {
     </header>
 
     <main>
-      <h2 class="text-center">Collect Refik Anadol's Signed Prints</h2>
+      <h2 class="text-center">Claim Printed Artworks from –GRAPH</h2>
       <ol>
         <li>
-          Select {{ maxSelectableNumber }} desired items in the following
-          artwork grid.
+          Review your collected artworks from the show –GRAPH.
         </li>
         <li>Fill in the shipping information.</li>
         <li>Confirm and click "Send".</li>
       </ol>
       <div class="two-col">
         <div class="left">
-          <h3>I. Select Artworks</h3>
+          <h3>I. Review Artworks</h3>
           <strong style="display: block; margin-bottom: 0.5rem">
-            * Please select {{ maxSelectableNumber }} items from your collected
-            digital editions for signed prints. Remaining:
-            {{ maxSelectableNumber - totalSelected }}
+            * Please review the following {{ maxSelectableNumber }} items from your collected
+            digital editions for prints.
           </strong>
           <div class="grids">
             <div class="card" :class="{ selected: token.selected }" v-for="token in tokens" :key="token.id" @click="selectToken(token)">
@@ -56,7 +54,7 @@ p.note {
               </div>
             </div>
           </div>
-          <p class="note">Something missing? Contact <a href="mailto:support@feralfile.com">support@feralfile.com</a> with your Feral File alias or email. </p>
+          <p class="note">Something missing? Contact <a href="mailto:support@feralfile.com">support@feralfile.com</a> with your Feral File alias or email.</p>
         </div>
         <div class="right">
           <h3>II. Fill Out the Following Information</h3>
@@ -119,7 +117,7 @@ p.note {
               <label for="phone">Phone Number *</label>
               <div>
                 <!--<input type="text" id="countrycode" name="countrycode" placeholder="Country Code" autocomplete="tel" v-model="form.phoneCountryCode" />-->
-                <input type="tel" id="phone" name="phone" placeholder="Phone Number (With Country Code)" autocomplete="tel" v-model="form.phoneNumber" />
+                <input type="tel" id="phone" name="phone" placeholder="Phone Number (with country code)" autocomplete="tel" v-model="form.phoneNumber" />
               </div>
               <!--<div class="input-errors" v-for="(error, index) of v$.form.phoneCountryCode.$errors" :key="index">
                 <div class="error-msg">{{ error.$message }}</div>
