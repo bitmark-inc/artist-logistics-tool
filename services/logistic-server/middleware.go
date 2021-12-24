@@ -100,7 +100,7 @@ func validateEthereumSignature(requester, token string) error {
 // validateBitmarkSignature validate a token is signed by the requester
 // and check the message is a specific string
 // TODO: figure out how to deal with the token attached message in an abstract way
-func validateBitmarkSignature(requester, token string) error {
+func validateBitmarkSignature(requester, token, logisticID string) error {
 	tokenBytes, err := hex.DecodeString(token)
 	if err != nil {
 		return err
@@ -109,7 +109,7 @@ func validateBitmarkSignature(requester, token string) error {
 	signature := tokenBytes[0:64]
 
 	message := string(tokenBytes[64:])
-	if message != viper.GetString("feralfile.preset_message") {
+	if message != logisticID {
 		return fmt.Errorf("invalid payload")
 	}
 
@@ -156,6 +156,11 @@ func validateERC1271Signature(c context.Context, walletAddress, token string) (b
 // authorization is a middleware to validate requests
 func authorization() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		logisticID := c.GetHeader("LogisticID")
+		// TODO: remove the default value of logistic id
+		if logisticID == "" {
+			logisticID = "refik-001"
+		}
 
 		requester := c.GetHeader("Requester")
 		authStrings := strings.Split(c.GetHeader("Authorization"), " ")
@@ -192,7 +197,7 @@ func authorization() gin.HandlerFunc {
 				}
 			}
 		} else {
-			if err := validateBitmarkSignature(requester, authToken); err != nil {
+			if err := validateBitmarkSignature(requester, authToken, logisticID); err != nil {
 				logrus.WithError(err).WithField("requester", requester).WithField("authToken", authToken).Error("invalid bitmark signature")
 				c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 					"error": "invalid signature",
@@ -203,6 +208,7 @@ func authorization() gin.HandlerFunc {
 
 		logrus.WithField("requester", requester).Debug("authentication")
 		c.Set("requester", requester)
+		c.Set("logisticID", logisticID)
 
 		c.Next()
 	}

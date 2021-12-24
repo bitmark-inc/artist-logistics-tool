@@ -300,7 +300,13 @@ const imageSrc: StringMap = {
       );
 
       if (resp.data.artworks.length < 3) {
-        this.$router.push({ name: "Nothing" });
+        this.$router.push({
+          name: "Nothing",
+          params: {
+            message:
+              "We were unable to find any artworks under your control that qualify for receiving prints. Please contact Refik Anadol through your designated exhibition channel if you have any followup questions.",
+          },
+        });
       }
 
       this.hasToken = true;

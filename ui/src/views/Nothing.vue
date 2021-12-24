@@ -48,7 +48,7 @@ main {
       <img src="img/au.svg" alt="">
       <h1>Autonomy</h1>
       <hr>
-      <p class="des">We were unable to find any artworks under your control that qualify for receiving prints. Please contact Refik Anadol through your designated exhibition channel if you have any followup questions.</p>
+      <p class="des" v-html="message"></p>
     </div>
   </main>
 </template>
@@ -57,6 +57,12 @@ main {
 import { Options, Vue } from "vue-class-component";
 
 @Options({
+  props: {
+    message: {
+      type: String,
+    },
+  },
+
   async created() {
     if (this.$web3Modal.cachedProvider == "walletconnect") {
       let provider = await this.$web3Modal.connect();

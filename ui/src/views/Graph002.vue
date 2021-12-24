@@ -17,7 +17,7 @@ p.note {
 </style>
 
 <template>
-  <div v-if="loggedIn">
+  <div v-if="loggedIn && hasToken">
     <header>
       <a class="brand">
         <img src="img/au.svg" />
@@ -47,7 +47,7 @@ p.note {
             digital editions for prints.
           </strong>
           <div class="grids">
-            <div class="card" :class="{ selected: token.selected }" v-for="token in tokens" :key="token.id" @click="selectToken(token)">
+            <div class="card" v-for="token in tokens" :key="token.id">
               <div class="image" :style="{ 'background-image': 'url(' + token.imageURL + ')' }"></div>
               <div class="info">
                 <p>{{ token.name }}</p>
@@ -162,13 +162,30 @@ p.note {
 
 <script lang="ts">
 import { Options, Vue, setup } from "vue-class-component";
-import Web3 from "web3";
-import { AbiItem } from "web3-utils";
 
 import useVuelidate from "@vuelidate/core";
 import { required, email, helpers } from "@vuelidate/validators";
 
 import axios from "axios";
+
+type StringMap = {
+  [key: string]: string;
+};
+
+const imageSrc: StringMap = {
+  "4fd83a576ee3d7788eb58704b021f1dd4683abc7c19709ecc4284d907fb22c32bfd4efa83b6a5a5397733edba9de416628e2b7564fe8f4bad6beddc4a4e11f5b":
+    "https://cdn.feralfileassets.com/thumbnails/cee5b80c-af17-44d0-9a56-c17a68f92569/1637146824",
+  b11df60a3ac1f87204558587531b6acec9bc841513bfb8dffae240979edb2aa7c2e11933685a6c149cc864b4faa04861115699129841b64f233d512b80169c22:
+    "https://cdn.feralfileassets.com/thumbnails/5e0a93aa-22d0-4305-8bdd-5806dab5503a/1636853639",
+  e757eabdb3dba00db25ba720be40c3537c5311a70b071b1ea40ae24fff380f36325dd45e291236078426709c36bf8f03a42acac442eb5510afb6c18abd2e9a0c:
+    "https://cdn.feralfileassets.com/thumbnails/1b1ffd48-5fc2-4d19-a563-364e00ddfb01/1637210985",
+  e71d0b1635546929cea414e34cc8f9e7c14d913a7d1cac2dbb9d9e3764ecb503e1d65efb5c115fb8625dab8810d8fb9a112df54a5ecfe72d54685d43875fe52d:
+    "https://cdn.feralfileassets.com/thumbnails/2fb649d0-3ed2-4539-8ea2-e073b85e9a21/1637249094",
+  "4fa259125b48951aab7dd988cecbe20cd12b2ecf49dadb92771ba3e8ec6df57220f6186a628bd9915ba703995fcc60522d0772c069b849c62db55b2afcaccc6f":
+    "https://cdn.feralfileassets.com/thumbnails/99d373e5-cc9d-45e8-8aa5-1ed47e481791/1637145106",
+  "8ea9d880bd9e39675d437992c3d52f9b334d8e8281dd315df06b982b863d98847200db0813bca302addc58c5f51b3583966fc4f31cb8e8793d58643bdf447836":
+    "https://cdn.feralfileassets.com/thumbnails/e7252d16-c248-4de0-aade-433e9e7d2484/1637677549",
+};
 
 @Options({
   components: {},
@@ -193,6 +210,7 @@ import axios from "axios";
 
     this.loggedIn = true;
     await this.checkSubmission();
+    await this.loadToken();
   },
 
   methods: {
@@ -203,6 +221,7 @@ import axios from "axios";
           {
             headers: {
               Requester: this.queryAccount,
+              LogisticID: this.logisticID,
             },
           }
         );
@@ -212,22 +231,49 @@ import axios from "axios";
       }
     },
 
+    async loadToken() {
+      let resp = await axios.get(
+        this.apiRoot + "/api/owned/" + this.queryAccount
+      );
+
+      if (resp.data.artworks.length < 3) {
+        this.$router.push({
+          name: "Nothing",
+          params: {
+            message:
+              'We were unable to find any artworks under your control that qualify for receiving prints. Email <a href="mailto:support@feralfile.com">support@feralfile.com</a> or visit our Discord <a href="https://discord.gg/NHMJAnjjCS" target="_blank">troubleshooting channel</a> if you have any followup questions.',
+          },
+        });
+      }
+
+      this.hasToken = true;
+
+      resp.data.artworks.forEach(async (ownedToken: any) => {
+        await this.pushTokenByBitmark(ownedToken.token_id);
+      });
+    },
+
+    async pushTokenByBitmark(tokenID: string) {
+      let resp: any = await axios.get(
+        "https://api.bitmark.com/v1/bitmarks/" + tokenID + "?asset=true"
+      );
+
+      let data = resp.data;
+      this.tokens.push({
+        id: tokenID,
+        name: data.asset.metadata.title,
+        imageURL: imageSrc[data.asset.id],
+      });
+    },
+
     async submit() {
       this.v$.$touch();
       if (this.v$.$error) {
         return;
       }
 
-      let selectedTokens: string[] = [];
-      this.tokens.forEach((token: any) => {
-        if (token.selected) {
-          selectedTokens.push(token.id);
-        }
-      });
-
       let data = {
         information: this.form,
-        tokens: selectedTokens,
       };
 
       let authToken = this.code;
@@ -237,6 +283,7 @@ import axios from "axios";
           headers: {
             Authorization: "Bearer " + authToken,
             Requester: this.accountNumber,
+            LogisticID: this.logisticID,
           },
         });
         this.$router.push({ name: "ThankYou" });
@@ -322,6 +369,7 @@ import axios from "axios";
   data() {
     return {
       loggedIn: false,
+      hasToken: false,
       accountNumber: "",
 
       logisticID: "graph-002",

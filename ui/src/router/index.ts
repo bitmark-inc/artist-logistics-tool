@@ -4,7 +4,6 @@ import Welcome from '../views/Welcome.vue'
 import ThankYou from '../views/ThankYou.vue'
 import Nothing from '../views/Nothing.vue'
 import NotFound from '../views/NotFound.vue'
-import Graph002 from '../views/Graph002.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -13,7 +12,7 @@ const routes: Array<RouteRecordRaw> = [
     component: Home
   },
   {
-    path: '/welcome',
+    path: '/refik-welcome',
     name: 'Welcome',
     component: Welcome
   },
@@ -23,28 +22,22 @@ const routes: Array<RouteRecordRaw> = [
     component: ThankYou
   },
   {
-    path: '/-graph',
+    path: '/-graph-002',
     name: 'Graph002',
-    component: Graph002
+    component: () => import(/* webpackChunkName: "about" */ '../views/Graph002.vue')
   },
   {
     path: '/nothing',
     name: 'Nothing',
-    component: Nothing
+    component: Nothing,
+    props: true,
   },
   {
     path: '/404',
     name: 'NotFound',
     component: NotFound
   },
-  // {
-  //   path: '/about',
-  //   name: 'About',
-  //   // route level code-splitting
-  //   // this generates a separate chunk (about.[hash].js) for this route
-  //   // which is lazy-loaded when the route is visited.
-  //   component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  // }
+  { path: "/:pathMatch(.*)*", component: NotFound },
 ]
 
 const router = createRouter({
