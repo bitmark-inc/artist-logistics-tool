@@ -31,7 +31,7 @@ p.note {
     </header>
 
     <main>
-      <h2 class="text-center">Claim Printed Artworks from –GRAPH</h2>
+      <h2 class="text-center">Claim Physical Drawings from –GRAPH</h2>
       <ol>
         <li>
           Review your collected artworks from the show –GRAPH.
