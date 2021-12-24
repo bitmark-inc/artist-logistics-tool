@@ -60,27 +60,27 @@ func NewLogisticStore(dsn string) *LogisticStore {
 	}
 }
 
-func (s *LogisticStore) QueryOwnedArtworkCounts(address string) (int64, error) {
+func (s *LogisticStore) QueryOwnedArtworkCounts(address, logisticID string) (int64, error) {
 	var count int64
-	if err := s.db.Model(ArtworkOwnershipSnapshot{}).Where("owner_address = ?", address).Count(&count).Error; err != nil {
+	if err := s.db.Model(ArtworkOwnershipSnapshot{}).Where("owner_address = ? AND logistic_id = ?", address, logisticID).Count(&count).Error; err != nil {
 		return 0, err
 	}
 
 	return count, nil
 }
 
-func (s *LogisticStore) QueryOwnedArtworks(address string) ([]ArtworkOwnershipSnapshot, error) {
+func (s *LogisticStore) QueryOwnedArtworks(address, logisticID string) ([]ArtworkOwnershipSnapshot, error) {
 	var artworks []ArtworkOwnershipSnapshot
-	if err := s.db.Where("owner_address = ?", address).Find(&artworks).Error; err != nil {
+	if err := s.db.Where("owner_address = ? AND logistic_id = ?", address, logisticID).Find(&artworks).Error; err != nil {
 		return nil, err
 	}
 
 	return artworks, nil
 }
 
-func (s *LogisticStore) ValidateOwnedArtworks(address string, tokenIDs []string) (bool, error) {
+func (s *LogisticStore) ValidateOwnedArtworks(address, logisticID string, tokenIDs []string) (bool, error) {
 	var ownedTokenCount int64
-	if err := s.db.Model(ArtworkOwnershipSnapshot{}).Where("owner_address = ? AND token_id IN ?", address, tokenIDs).Count(&ownedTokenCount).Error; err != nil {
+	if err := s.db.Model(ArtworkOwnershipSnapshot{}).Where("owner_address = ? AND logistic_id = ? AND token_id IN ?", address, logisticID, tokenIDs).Count(&ownedTokenCount).Error; err != nil {
 		return false, err
 	}
 

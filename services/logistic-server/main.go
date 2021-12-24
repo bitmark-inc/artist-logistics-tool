@@ -38,8 +38,14 @@ func main() {
 
 	apiRouter := router.Group("/api")
 	apiRouter.GET("/owned/:requester", func(c *gin.Context) {
+		logisticID := c.GetHeader("LogisticID")
+		// TODO: remove the default value of logistic id
+		if logisticID == "" {
+			logisticID = "refik-001"
+		}
+
 		requester := c.Param("requester")
-		artworks, err := db.QueryOwnedArtworks(requester)
+		artworks, err := db.QueryOwnedArtworks(requester, logisticID)
 		if err != nil {
 			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
 				"error": err.Error(),
@@ -105,7 +111,7 @@ func main() {
 
 		switch logisticID {
 		case "refik-001":
-			count, err := db.QueryOwnedArtworkCounts(requester)
+			count, err := db.QueryOwnedArtworkCounts(requester, logisticID)
 			if err != nil {
 				logrus.WithError(err).Error("can not get requester data from db")
 				c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "can not get requester data from db"})
@@ -119,7 +125,7 @@ func main() {
 				return
 			}
 
-			ok, err := db.ValidateOwnedArtworks(requester, req.Tokens)
+			ok, err := db.ValidateOwnedArtworks(requester, logisticID, req.Tokens)
 			if err != nil {
 				logrus.WithError(err).Error("can not get requester data from db")
 				c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "can not get requester data from db"})
