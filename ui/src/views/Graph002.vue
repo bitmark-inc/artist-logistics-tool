@@ -233,10 +233,15 @@ const imageSrc: StringMap = {
 
     async loadToken() {
       let resp = await axios.get(
-        this.apiRoot + "/api/owned/" + this.queryAccount
+        this.apiRoot + "/api/owned/" + this.queryAccount,
+        {
+          headers: {
+            LogisticID: this.logisticID,
+          },
+        }
       );
 
-      if (resp.data.artworks.length < 3) {
+      if (resp.data.artworks.length < 0) {
         this.$router.push({
           name: "Nothing",
           params: {
