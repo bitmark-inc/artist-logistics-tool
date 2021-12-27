@@ -44,7 +44,7 @@ p.note {
           <h3>I. Review Artworks</h3>
           <strong style="display: block; margin-bottom: 0.5rem">
             * Please review the following {{ maxSelectableNumber }} items from your collected
-            digital editions for prints.
+            digital editions for physical drawings.
           </strong>
           <div class="grids">
             <div class="card" v-for="token in tokens" :key="token.id">
@@ -241,7 +241,7 @@ const imageSrc: StringMap = {
           name: "Nothing",
           params: {
             message:
-              'We were unable to find any artworks under your control that qualify for receiving prints. Email <a href="mailto:support@feralfile.com">support@feralfile.com</a> or visit our Discord <a href="https://discord.gg/NHMJAnjjCS" target="_blank">troubleshooting channel</a> if you have any followup questions.',
+              'We were unable to find any artworks under your control that qualify for receiving physical drawings. Email <a href="mailto:support@feralfile.com">support@feralfile.com</a> or visit our Discord <a href="https://discord.gg/NHMJAnjjCS" target="_blank">troubleshooting channel</a> if you have any followup questions.',
           },
         });
       }
