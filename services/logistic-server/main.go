@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"errors"
 	"net/http"
 
@@ -13,17 +12,12 @@ import (
 	"github.com/spf13/viper"
 	"gorm.io/gorm"
 
-	bitmarksdk "github.com/bitmark-inc/bitmark-sdk-go"
 	"github.com/bitmark-inc/config-loader"
 	"github.com/bitmark-inc/logistics"
 )
 
 func main() {
 	config.LoadConfig("LOGISTIC_SERVER")
-
-	bitmarksdk.Init(&bitmarksdk.Config{
-		Network: bitmarksdk.Network(viper.GetString("network")),
-	})
 
 	db := logistics.NewLogisticStore(viper.GetString("store.dsn"))
 
@@ -37,42 +31,13 @@ func main() {
 	}
 
 	apiRouter := router.Group("/api")
-	apiRouter.GET("/owned/:requester", func(c *gin.Context) {
+
+	// validate if an address has already submitted for a logistic campaign before
+	apiRouter.HEAD("/claim/:address", func(c *gin.Context) {
 		logisticID := c.GetHeader("LogisticID")
-		// TODO: remove the default value of logistic id
-		if logisticID == "" {
-			logisticID = "refik-001"
-		}
+		claimAddress := c.Param("address")
 
-		requester := c.Param("requester")
-		artworks, err := db.QueryOwnedArtworks(requester, logisticID)
-		if err != nil {
-			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
-				"error": err.Error(),
-			})
-			return
-		}
-		c.JSON(http.StatusOK, gin.H{"artworks": artworks})
-	})
-
-	apiRouter.HEAD("/claim", func(c *gin.Context) {
-		logisticID := c.GetHeader("LogisticID")
-		// TODO: remove the default value of logistic id
-		if logisticID == "" {
-			logisticID = "refik-001"
-		}
-
-		var query struct {
-			Requester string `form:"requester" binding:"required"`
-		}
-
-		if err := c.Bind(&query); err != nil {
-			logrus.WithError(err).Error("invalid request parameter")
-			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
-
-		info, err := db.GetShipmentInformation(logisticID, query.Requester)
+		info, err := db.GetShipmentInformation(logisticID, claimAddress)
 
 		if err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -93,13 +58,14 @@ func main() {
 	})
 
 	apiRouter.Use(authorization())
+	// submits the shipmenet information of an owner if he is qualified
 	apiRouter.POST("/claim", func(c *gin.Context) {
 		requester := c.GetString("requester")
 		logisticID := c.GetString("logisticID")
 
 		var req struct {
 			Information logistics.ShipmentInformation `json:"information"`
-			Tokens      []string                      `json:"tokens"`
+			TokenID     string                        `json:"tokenID"`
 		}
 
 		if err := c.Bind(&req); err != nil {
@@ -107,63 +73,35 @@ func main() {
 			return
 		}
 
-		// requester = "0x37519C9BdE96f1Af2e498E3Dd3E87C1fBBAE84Be"
+		// validate ownership here. Here is an example of validate from a db snapshot
+		// ok, err := db.ValidateOwnedArtworks(requester, logisticID, []string{req.TokenID})
+		// if err != nil {
+		// 	c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "fail to validate token ownership"})
+		// 	return
+		// }
+		// if !ok {
+		// 	c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "token not belong to this user"})
+		// 	return
+		// }
 
-		switch logisticID {
-		case "refik-001":
-			count, err := db.QueryOwnedArtworkCounts(requester, logisticID)
-			if err != nil {
-				logrus.WithError(err).Error("can not get requester data from db")
-				c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "can not get requester data from db"})
+		// TODO: or validate the ownership from infura
+
+		if err := db.SaveShipmentInformation(logisticID, requester, req.Information, nil); err != nil {
+			pqErr := err.(*pgconn.PgError)
+			if pqErr.Code == "23505" {
+				c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "information has already submitted"})
 				return
 			}
-
-			requiredSelectingTokenCounts := 3 * int(count/3)
-			logrus.WithField("requiredSelectingTokenCounts", requiredSelectingTokenCounts).Info("check selected token counts")
-			if len(req.Tokens) != requiredSelectingTokenCounts {
-				c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "invalid number of token selected"})
-				return
-			}
-
-			ok, err := db.ValidateOwnedArtworks(requester, logisticID, req.Tokens)
-			if err != nil {
-				logrus.WithError(err).Error("can not get requester data from db")
-				c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "can not get requester data from db"})
-				return
-			}
-
-			if !ok {
-				logrus.WithField("requester", requester).WithField("tokens", req.Tokens).Error("invalid NFT ownership detected")
-				c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "invalid NFT ownership detected"})
-				return
-			}
-
-			b, _ := json.Marshal(req.Tokens)
-
-			if err := db.SaveShipmentInformation(logisticID, requester, req.Information, b); err != nil {
-				pqErr := err.(*pgconn.PgError)
-				if pqErr.Code == "23505" {
-					c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "information has already submitted"})
-					return
-				}
-				c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "fail to upload shipment information"})
-				return
-			}
-		case "graph-002":
-			if err := db.SaveShipmentInformation(logisticID, requester, req.Information, nil); err != nil {
-				pqErr := err.(*pgconn.PgError)
-				if pqErr.Code == "23505" {
-					c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "information has already submitted"})
-					return
-				}
-				c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "fail to upload shipment information"})
-				return
-			}
+			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "fail to upload shipment information"})
+			return
 		}
 
 		c.JSON(http.StatusOK, gin.H{"ok": 1})
 	})
+
 	router.Use(static.Serve("/", static.LocalFile(viper.GetString("ui_path"), false)))
 
-	router.Run(":8087")
+	if err := router.Run(":8087"); err != nil {
+		logrus.WithError(err).Panic("server stopped with error")
+	}
 }

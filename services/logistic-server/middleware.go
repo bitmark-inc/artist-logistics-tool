@@ -16,20 +16,11 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
-	"golang.org/x/crypto/sha3"
-
-	"github.com/bitmark-inc/bitmark-sdk-go/account"
 )
 
 func etherueumHashedMessage(data []byte) []byte {
 	msg := fmt.Sprintf("\x19Ethereum Signed Message:\n%d%s", len(data), data)
 	return crypto.Keccak256([]byte(msg))
-}
-
-func bitmarkHashedMessage(messages string) []byte {
-	hash := sha3.New256()
-	hash.Write([]byte(fmt.Sprintf("\x01\xe9Bitmark Signed Message:\n%d%s", len(messages), messages)))
-	return hash.Sum(nil)
 }
 
 func ecrecover(message, signature []byte) (string, error) {
@@ -97,25 +88,6 @@ func validateEthereumSignature(requester, token string) error {
 	return nil
 }
 
-// validateBitmarkSignature validate a token is signed by the requester
-// and check the message is a specific string
-// TODO: figure out how to deal with the token attached message in an abstract way
-func validateBitmarkSignature(requester, token, logisticID string) error {
-	tokenBytes, err := hex.DecodeString(token)
-	if err != nil {
-		return err
-	}
-
-	signature := tokenBytes[0:64]
-
-	message := string(tokenBytes[64:])
-	if message != logisticID {
-		return fmt.Errorf("invalid payload")
-	}
-
-	return account.Verify(requester, bitmarkHashedMessage(message), signature)
-}
-
 // validateERC1271Signature validates a token followed the ERC1271 spec
 func validateERC1271Signature(c context.Context, walletAddress, token string) (bool, error) {
 	tokenBytes, err := hex.DecodeString(token)
@@ -174,31 +146,28 @@ func authorization() gin.HandlerFunc {
 
 		authToken := authStrings[1]
 		// requester starts with "0x" would be treated as an ethereum account
-		if requester[0:2] == "0x" {
-			if err := validateEthereumSignature(requester, authToken); err != nil {
-				logrus.WithError(err).WithField("requester", requester).WithField("authToken", authToken).Error("invalid ethereum signature")
+		if strings.ToLower(requester[0:2]) != "0x" {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+				"error": "only support ethereum address",
+			})
+			return
+		}
 
-				// fallback check ERC1271
-				contractSign, err := validateERC1271Signature(c, requester, authToken)
-				if err != nil {
-					logrus.WithError(err).WithField("requester", requester).WithField("authToken", authToken).Error("fail to check erc1272 signature")
-					c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-						"error": "invalid signature",
-					})
-					return
-				}
+		if err := validateEthereumSignature(requester, authToken); err != nil {
+			logrus.WithError(err).WithField("requester", requester).WithField("authToken", authToken).Error("invalid ethereum signature")
 
-				if !contractSign {
-					logrus.WithError(err).WithField("requester", requester).WithField("authToken", authToken).Error("invalid erc1271 signature")
-					c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-						"error": "invalid signature",
-					})
-					return
-				}
+			// fallback check ERC1271
+			contractSign, err := validateERC1271Signature(c, requester, authToken)
+			if err != nil {
+				logrus.WithError(err).WithField("requester", requester).WithField("authToken", authToken).Error("fail to check erc1272 signature")
+				c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+					"error": "invalid signature",
+				})
+				return
 			}
-		} else {
-			if err := validateBitmarkSignature(requester, authToken, logisticID); err != nil {
-				logrus.WithError(err).WithField("requester", requester).WithField("authToken", authToken).Error("invalid bitmark signature")
+
+			if !contractSign {
+				logrus.WithError(err).WithField("requester", requester).WithField("authToken", authToken).Error("invalid erc1271 signature")
 				c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 					"error": "invalid signature",
 				})
