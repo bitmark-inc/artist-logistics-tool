@@ -128,12 +128,6 @@ func validateERC1271Signature(c context.Context, walletAddress, token string) (b
 // authorization is a middleware to validate requests
 func authorization() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		logisticID := c.GetHeader("LogisticID")
-		// TODO: remove the default value of logistic id
-		if logisticID == "" {
-			logisticID = "refik-001"
-		}
-
 		requester := c.GetHeader("Requester")
 		authStrings := strings.Split(c.GetHeader("Authorization"), " ")
 
@@ -177,8 +171,6 @@ func authorization() gin.HandlerFunc {
 
 		logrus.WithField("requester", requester).Debug("authentication")
 		c.Set("requester", requester)
-		c.Set("logisticID", logisticID)
-
 		c.Next()
 	}
 }

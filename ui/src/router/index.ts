@@ -2,7 +2,6 @@ import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import Home from '../views/Home.vue'
 import Welcome from '../views/Welcome.vue'
 import ThankYou from '../views/ThankYou.vue'
-import Nothing from '../views/Nothing.vue'
 import NotFound from '../views/NotFound.vue'
 
 const routes: Array<RouteRecordRaw> = [
@@ -12,7 +11,7 @@ const routes: Array<RouteRecordRaw> = [
     component: Home
   },
   {
-    path: '/refik-welcome',
+    path: '/welcome',
     name: 'Welcome',
     component: Welcome
   },
@@ -20,17 +19,6 @@ const routes: Array<RouteRecordRaw> = [
     path: '/thankyou',
     name: 'ThankYou',
     component: ThankYou
-  },
-  {
-    path: '/-graph-002',
-    name: 'Graph002',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Graph002.vue')
-  },
-  {
-    path: '/nothing',
-    name: 'Nothing',
-    component: Nothing,
-    props: true,
   },
   {
     path: '/404',

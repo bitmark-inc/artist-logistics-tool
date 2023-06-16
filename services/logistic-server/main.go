@@ -61,7 +61,11 @@ func main() {
 	// submits the shipmenet information of an owner if he is qualified
 	apiRouter.POST("/claim", func(c *gin.Context) {
 		requester := c.GetString("requester")
-		logisticID := c.GetString("logisticID")
+		logisticID := c.GetHeader("LogisticID")
+		if logisticID == "" {
+			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "LogisticID from header is required"})
+			return
+		}
 
 		var req struct {
 			Information logistics.ShipmentInformation `json:"information"`
@@ -84,7 +88,7 @@ func main() {
 		// 	return
 		// }
 
-		// TODO: or validate the ownership from infura
+		// TODO: or validate the ownership from infura or other sources
 
 		if err := db.SaveShipmentInformation(logisticID, requester, req.Information, nil); err != nil {
 			pqErr := err.(*pgconn.PgError)
@@ -100,6 +104,11 @@ func main() {
 	})
 
 	router.Use(static.Serve("/", static.LocalFile(viper.GetString("ui_path"), false)))
+	router.NoRoute(func(c *gin.Context) {
+		c.JSON(404, gin.H{
+			"message": "this is not what you are looking for",
+		})
+	})
 
 	if err := router.Run(":8087"); err != nil {
 		logrus.WithError(err).Panic("server stopped with error")

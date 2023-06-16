@@ -2,6 +2,7 @@ package logistics
 
 import (
 	"encoding/json"
+	"fmt"
 	"time"
 
 	dialectsPG "github.com/jinzhu/gorm/dialects/postgres"
@@ -88,6 +89,10 @@ func (s *LogisticStore) ValidateOwnedArtworks(address, logisticID string, tokenI
 }
 
 func (s *LogisticStore) SaveShipmentInformation(logisticID, ownerAddress string, information ShipmentInformation, data json.RawMessage) error {
+	if logisticID == "" {
+		return fmt.Errorf("missing logistic id")
+	}
+
 	info := LogisticShipmentInformation{
 		ShipmentInformation: information,
 		LogisticID:          logisticID,

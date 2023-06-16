@@ -48,7 +48,7 @@ main {
       <img src="img/au.svg" alt="">
       <h1>Autonomy</h1>
       <hr>
-      <p class="des" v-html="message"></p>
+      <slot />
     </div>
   </main>
 </template>
@@ -57,18 +57,16 @@ main {
 import { Options, Vue } from "vue-class-component";
 
 @Options({
-  props: {
-    message: {
-      type: String,
-    },
-  },
-
   async created() {
-    if (this.$web3Modal.cachedProvider == "walletconnect") {
-      let provider = await this.$web3Modal.connect();
-      provider.disconnect();
+    if (this.$web3Modal.cachedProvider != "") {
+      if (this.$web3Modal.cachedProvider == "walletconnect") {
+        let provider = await this.$web3Modal.connect();
+        provider.disconnect();
+      }
+    } else {
+      this.$router.push({ name: "Welcome" });
     }
-    this.$web3Modal.clearCachedProvider();
+    await this.$web3Modal.clearCachedProvider();
   },
 })
 export default class Nothing extends Vue {}

@@ -21,13 +21,20 @@ default: build
 
 config:
 
+db-migrate:
+	go run commands/db-migration/main.go
+
+logistic-server-ui:
+	cd ui/dist && npm install
+	cd ui/dist && npm run build
+
 logistic-server:
 	go build -o bin/logistic-server ./services/logistic-server
 
 run-logistic-server: logistic-server
 	./bin/logistic-server
 
-build: logistic-server
+build: logistic-server logistic-server-ui
 
 run: run-logistic-server
 
